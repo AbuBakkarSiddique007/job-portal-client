@@ -3,11 +3,19 @@ import userLogin from "../assets/lottie/userLogin.json"
 import AuthContext from "../Context/AuthContext";
 import { useContext } from "react";
 import SocialLogin from "../Page/Shared/SocialLogin";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
 
     const { signInUser } = useContext(AuthContext)
 
+    const location = useLocation()
+    const from = location.state || "/";
+
+    const navigate = useNavigate()
+    
+    console.log("In login page:", location);
+    
     const handleLogin = (event) => {
         event.preventDefault()
 
@@ -26,6 +34,7 @@ const Login = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log(user);
+                navigate(from) 
 
             })
 
@@ -82,7 +91,7 @@ const Login = () => {
 
                                 <div><a className="link link-hover">Forgot password?</a></div>
 
-                                <button className="btn btn-neutral mt-4">Register</button>
+                                <button className="btn btn-neutral mt-4">Login</button>
                             </fieldset>
                         </form>
                         <div>
