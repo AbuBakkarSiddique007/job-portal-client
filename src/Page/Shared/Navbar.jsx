@@ -33,7 +33,7 @@ const Navbar = () => {
                 <NavLink to="/addJob" className={navLinks}>Add Job</NavLink>
             </li>
             <li>
-                <NavLink to="/about" className={navLinks}>About</NavLink>
+                <NavLink to="/myPostedJobs" className={navLinks}>My Posted Jobs</NavLink>
             </li>
         </>
     );

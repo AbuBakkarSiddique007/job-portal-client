@@ -2,71 +2,71 @@ import React, { useEffect, useState } from 'react';
 import useAuth from '../../Hooks/useAuth';
 
 const MyApplication = () => {
-    const [jobs, setJobs] = useState([])
-    const { user } = useAuth()
-
-    console.log(jobs);
-
+    const [jobs, setJobs] = useState([]);
+    const { user } = useAuth();
 
     useEffect(() => {
+        if (!user?.email) return;
+
         fetch(`http://localhost:5000/job-applications?email=${user.email}`)
             .then(res => res.json())
             .then(data => setJobs(data))
-    }, [user.email])
-
+            .catch(err => console.error(err));
+    }, [user?.email]);
 
     return (
-        <div>
-            <h1>
-                My Application Content goes here !!! : ${jobs.length}
+        <div className="p-4">
+            <h1 className="text-2xl font-bold mb-4">
+                My Applications ({jobs.length})
             </h1>
-            <div>
-                <div className="overflow-x-auto">
-                    <table className="table">
-                        {/* head */}
-                        <thead>
+
+            <div className="overflow-x-auto">
+                <table className="table w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr>
+                            <th className="border border-gray-300 px-4 py-2">Company</th>
+                            <th className="border border-gray-300 px-4 py-2">Job Title</th>
+                            <th className="border border-gray-300 px-4 py-2">Location</th>
+                            <th className="border border-gray-300 px-4 py-2">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {jobs.length === 0 && (
                             <tr>
-                                <th>Name</th>
-                                <th>Job</th>
-                                <th>Favorite Color</th>
-                                <th></th>
+                                <td colSpan="5" className="text-center py-4">
+                                    No applications found.
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {/* row 1 */}
-                            {
-                                jobs.map(job => <tr key={job._id}>
-                                    <td>
-                                        <div className="flex items-center gap-3">
-                                            <div className="avatar">
-                                                <div className="mask mask-squircle h-12 w-12">
-                                                    <img
-                                                        src={job.company_logo}
-                                                        alt="Avatar Tailwind CSS Component" />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div className="font-bold"> {job.company} </div>
-                                                <div className="text-sm opacity-50">{job.location}</div>
-                                            </div>
+                        )}
+
+                        {jobs.map(application => (
+                            <tr key={application._id} className="hover:bg-gray-50">
+                                <td className="border border-gray-300 px-4 py-2 flex items-center gap-3">
+                                    {application.company_logo ? (
+                                        <img
+                                            src={application.company_logo}
+                                            alt={`${application.company} logo`}
+                                            className="h-10 w-10 object-contain"
+                                        />
+                                    ) : (
+                                        <div className="h-10 w-10 bg-gray-200 flex items-center justify-center text-gray-400 text-xs">
+                                            No Logo
                                         </div>
-                                    </td>
-                                    <td>
-                                        Zemlak, Daniel and Leannon
-                                        <br />
-                                        <span className="badge badge-ghost badge-sm">Desktop Support Technician</span>
-                                    </td>
-                                    <td>Purple</td>
-                                    <th>
-                                        <button className="btn btn-ghost btn-xs">details</button>
-                                    </th>
-                                </tr>)
-                            }
+                                    )}
+                                    <span>{application.company || 'N/A'}</span>
+                                </td>
 
-                        </tbody>
+                                <td className="border border-gray-300 px-4 py-2">{application.title || 'N/A'}</td>
+                                <td className="border border-gray-300 px-4 py-2">{application.location || 'N/A'}</td>
 
-                    </table>
-                </div>
+                                <td className="border border-gray-300 px-4 py-2">
+                                    <button className="btn btn-ghost btn-xs">Details</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

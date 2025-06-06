@@ -46,10 +46,20 @@ const JobCard = ({ job }) => {
             </p>
 
             <p className="text-sm text-gray-600 mt-3 line-clamp-3">
-                {description.length > 100 ? description.slice(0, 100) + '...' : description}
+               {
+                description
+               }
             </p>
+            {/* <p className="text-sm text-gray-600 mt-3 line-clamp-3">
+                {description.length > 100 ? description.slice(0, 100) + '...' : description}
+            </p> */}
 
             <div className="flex flex-wrap gap-2 mt-4">
+                {
+                    requirements
+                }
+            </div>
+            {/* <div className="flex flex-wrap gap-2 mt-4">
                 {requirements.slice(0, 3).map((tech, index) => (
                     <span
                         key={index}
@@ -58,7 +68,7 @@ const JobCard = ({ job }) => {
                         {tech}
                     </span>
                 ))}
-            </div>
+            </div> */}
 
             <div className="flex justify-between items-center mt-6">
                 <p className="text-indigo-600 text-lg font-bold">

@@ -5,7 +5,7 @@ import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
 
 const JobApply = () => {
-    const id = useParams()
+    const { id } = useParams()
 
     const { user } = useAuth()
     const navigate = useNavigate()
@@ -50,6 +50,8 @@ const JobApply = () => {
         )
             .then((res) => res.json())
             .then((data) => {
+                console.log("Job Application Payload:", jobApplication);
+
                 if (data.insertedId) {
                     Swal.fire({
                         title: "Data inserted!",
