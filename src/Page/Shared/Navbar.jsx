@@ -52,7 +52,7 @@ const Navbar = () => {
                             {links}
                         </ul>
                     </div>
-                    <Link to="/" className="font-bold text-2xl text-blue-700 px-3">PaisyUI</Link>
+                    <Link to="/" className="font-bold text-2xl text-blue-700 px-3">CareerConnect </Link>
                 </div>
 
                 <div className="navbar-center hidden lg:flex">
