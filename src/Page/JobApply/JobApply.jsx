@@ -10,10 +10,6 @@ const JobApply = () => {
     const { user } = useAuth()
     const navigate = useNavigate()
 
-    console.log(id, user);
-
-
-
     const submitJobApply = (event) => {
         event.preventDefault()
 
@@ -28,7 +24,6 @@ const JobApply = () => {
             github,
             resume
         }
-        console.log(formInfo);
 
 
         const jobApplication = {
@@ -39,7 +34,7 @@ const JobApply = () => {
             resume
         }
 
-        fetch("http://localhost:5000/job-applications", {
+        fetch("https://job-portal-server-drab-iota.vercel.app/job-applications", {
             method: "POST",
             headers: {
                 'content-type': 'application/json'
@@ -50,8 +45,6 @@ const JobApply = () => {
         )
             .then((res) => res.json())
             .then((data) => {
-                console.log("Job Application Payload:", jobApplication);
-
                 if (data.insertedId) {
                     Swal.fire({
                         title: "Data inserted!",

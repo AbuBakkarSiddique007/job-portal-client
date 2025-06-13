@@ -15,8 +15,6 @@ const Login = () => {
 
     const navigate = useNavigate()
 
-    // console.log("In login page:", location);
-
     const handleLogin = (event) => {
         event.preventDefault()
 
@@ -29,16 +27,14 @@ const Login = () => {
             password
         }
 
-        console.log("userInfo", userInfo);
-
         signInUser(email, password)
             .then((userCredential) => {
                 const userData = userCredential.user;
-                console.log("user:", userData.email);
+                // console.log("user:", userData.email);
 
 
                 // const user = { email: email }
-                // axios.post('http://localhost:5000/jwt', user, { withCredentials: true })
+                // axios.post('https://job-portal-server-drab-iota.vercel.app/jwt', user, { withCredentials: true })
                 //     .then(result => {
                 //         console.log(result.data);
                 //     })
@@ -49,7 +45,7 @@ const Login = () => {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorCode, errorMessage);
+                // console.log(errorCode, errorMessage);
 
             });
 

@@ -46,10 +46,10 @@ const AddJob = () => {
             hr_email,
             company_logo,
             status,
-            applicationCount: 0 
+            applicationCount: 0
         };
 
-        fetch('http://localhost:5000/jobs', {
+        fetch('https://job-portal-server-drab-iota.vercel.app/jobs', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

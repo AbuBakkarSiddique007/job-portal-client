@@ -4,11 +4,10 @@ import LatestJobCard from './LatestJobCard';
 const LatestJobs = () => {
     const [jobs, setJobs] = useState([])
     useEffect(() => {
-        fetch("http://localhost:5000/jobs")
+        fetch("https://job-portal-server-drab-iota.vercel.app/jobs")
             .then((result) => result.json())
             .then((data) => {
                 setJobs(data)
-                console.log(data);
             })
 
     }, [])

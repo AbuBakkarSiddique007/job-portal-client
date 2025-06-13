@@ -1,19 +1,37 @@
 import React, { useContext } from 'react';
 import AuthContext from '../../Context/AuthContext';
 import { FcGoogle } from "react-icons/fc";
+import Swal from 'sweetalert2';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const SocialLogin = () => {
     const { googleLogin } = useContext(AuthContext);
 
+    const location = useLocation()
+    const from = location.state || "/";
+    const navigate = useNavigate()
+
+
     const handleGoogleSignIn = () => {
         googleLogin()
             .then(result => {
-                console.log(result.user);
-                alert("Google sign-in successful!");
+                const user = result.user;
+                Swal.fire({
+                    title: `Welcome, ${user.displayName || 'User'}!`,
+                    text: 'Google sign-in successful!',
+                    icon: 'success',
+                    confirmButtonText: 'Continue'
+                });
+                navigate(from)
             })
             .catch(error => {
-                console.log(error.message);
-                alert("Google sign-in failed: " + error.message);
+                Swal.fire({
+                    title: 'Google Sign-In Failed',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+
             });
     };
 

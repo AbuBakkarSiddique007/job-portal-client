@@ -3,11 +3,18 @@ import registerLottie from "../assets/lottie/registerLottie.json";
 import { useContext } from "react";
 import AuthContext from "../Context/AuthContext";
 import SocialLogin from "../Page/Shared/SocialLogin";
+import Swal from "sweetalert2";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 const Register = () => {
 
     const { createUser } = useContext(AuthContext)
+
+    const location = useLocation()
+    const from = location.state || "/";
+
+    const navigate = useNavigate()
 
 
     const handleRegisterForm = (event) => {
@@ -19,43 +26,49 @@ const Register = () => {
         const password = form.password.value;
         const confirmPassword = form.confirmPassword.value;
 
-        const registerUser = {
-            name,
-            url,
-            email,
-            password,
-            confirmPassword
-        }
-
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])[A-Za-z\d@$!%*?&]{6,}$/;
 
         if (!passwordRegex.test(password)) {
-            return alert("Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.");
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Password Requirements',
+                text: "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.",
+            });
         }
 
         if (password !== confirmPassword) {
-            return alert("Paassword did not match");
-        }
-        if (password === confirmPassword) {
-            alert("User Created Successfully");
+            return Swal.fire({
+                icon: 'error',
+                title: 'Password Mismatch',
+                text: "Password did not match",
+            });
         }
 
-        console.log(registerUser);
+        if (password === confirmPassword) {
+            Swal.fire({
+                icon: 'success',
+                title: 'User Created Successfully',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
 
         createUser(email, password)
             .then((userCredential) => {
-
                 const user = userCredential.user;
-                console.log(user);
+                navigate(from)
+
 
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode, errorMessage);
-                alert(errorMessage);
+                Swal.fire({
+                    title: 'Error!',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                });
             });
-    }
+    };
 
 
     return (

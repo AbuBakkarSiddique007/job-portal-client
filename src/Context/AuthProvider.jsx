@@ -1,80 +1,69 @@
 import React, { useEffect, useState } from 'react';
 import AuthContext from './AuthContext';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    signOut
+} from 'firebase/auth';
 import { auth } from '../Firebase/firebase.init';
 import axios from 'axios';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
-
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-
-    // 01. Create a password-based account
     const createUser = (email, password) => {
+        setLoading(true);
+        return createUserWithEmailAndPassword(auth, email, password);
+    };
 
-        setLoading(true)
-        return createUserWithEmailAndPassword(auth, email, password)
-    }
-
-    // 02. Sign in a user with an email address and password
     const signInUser = (email, password) => {
-        setLoading(true)
+        setLoading(true);
+        return signInWithEmailAndPassword(auth, email, password);
+    };
 
-        return signInWithEmailAndPassword(auth, email, password)
-    }
-
-    // 04. Google Loign
     const googleLogin = () => {
-        setLoading(true)
-        return signInWithPopup(auth, googleProvider)
-    }
+        setLoading(true);
+        return signInWithPopup(auth, googleProvider);
+    };
 
-    // 03. To sign out a user
     const signOutUser = () => {
-        setLoading(true)
-        return signOut(auth)
-    }
+        setLoading(true);
+        return signOut(auth);
+    };
 
-
-    // Get the currently signed-in user
-    // Observe
     useEffect(() => {
-        const unsubcribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser)
-            console.log("State captured", currentUser?.email);
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
 
             if (currentUser?.email) {
-                const user = { email: currentUser?.email }
+                const user = { email: currentUser.email };
 
-                axios.post(`http://localhost:5000/jwt`, user, {
+                axios.post(`https://job-portal-server-drab-iota.vercel.app/jwt`, user, {
                     withCredentials: true
-                })
-                    .then(result => {
-                        console.log("login token", result.data)
-                        setLoading(false)
-                    })
-            }
-            else {
-                axios.post(`http://localhost:5000/logout`, {}, {
+                }).then(() => {
+                    setLoading(false);
+                    toast.success(`Logged in as ${currentUser.email}`, { autoClose: 3000 });
+                });
+            } else {
+                axios.post(`https://job-portal-server-drab-iota.vercel.app/logout`, {}, {
                     withCredentials: true
-                })
-                    .then(res => {
-                        console.log("logout:", res.data)
-                        setLoading(false)
-                    })
+                }).then(() => {
+                    setLoading(false);
+                    toast.info('Logged out successfully', { autoClose: 3000 });
+                });
             }
-        })
-        return () => {
-            unsubcribe()
-        }
-    }
-        , [])
+        });
 
-
+        return () => unsubscribe();
+    }, []);
 
     const userInfo = {
         user,
@@ -83,17 +72,15 @@ const AuthProvider = ({ children }) => {
         signInUser,
         signOutUser,
         googleLogin
-    }
+    };
 
     return (
-        <div>
+        <>
             <AuthContext.Provider value={userInfo}>
-                {
-                    children
-                }
+                {children}
             </AuthContext.Provider>
-
-        </div>
+            <ToastContainer />
+        </>
     );
 };
 

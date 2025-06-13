@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import AuthContext from '../../Context/AuthContext';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
     const { user, signOutUser } = useContext(AuthContext);
@@ -8,10 +9,10 @@ const Navbar = () => {
     const handleLogOut = () => {
         signOutUser()
             .then(() => {
-                alert("User signed out.");
+                // toast.success("User signed out.");
             })
             .catch((error) => {
-                console.error(error);
+                toast.error("Error signing out.");
             });
     };
 

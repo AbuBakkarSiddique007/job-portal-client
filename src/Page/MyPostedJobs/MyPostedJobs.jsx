@@ -5,15 +5,13 @@ import { Link } from 'react-router-dom';
 const MyPostedJobs = () => {
     const { user } = useAuth();
     const [jobs, setJobs] = useState([]);
-    console.log(jobs);
 
     useEffect(() => {
         if (!user?.email) return;
 
-        fetch(`http://localhost:5000/jobs?email=${user.email}`)
+        fetch(`https://job-portal-server-drab-iota.vercel.app/jobs?email=${user.email}`)
             .then(res => res.json())
             .then(data => {
-                console.log("Fetched jobs for:", user.email);
                 setJobs(data);
             })
             .catch(err => console.error("Failed to fetch jobs:", err));

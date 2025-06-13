@@ -6,13 +6,12 @@ const ViewApplications = () => {
     const applications = useLoaderData();
 
     const handleSelect = (e, id) => {
-        console.log(e.target.value, id);
         const data = {
             status: e.target.value,
 
         }
 
-        fetch(`http://localhost:5000/job-applications/${id}`, {
+        fetch(`https://job-portal-server-drab-iota.vercel.app/job-applications/${id}`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json'

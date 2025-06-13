@@ -13,13 +13,13 @@ const MyApplication = () => {
         if (!user?.email) return;
 
         // 1
-        // fetch(`http://localhost:5000/job-applications?email=${user.email}`)
+        // fetch(`https://job-portal-server-drab-iota.vercel.app/job-applications?email=${user.email}`)
         //     .then(res => res.json())
         //     .then(data => setJobs(data))
         //     .catch(err => console.error(err));
 
         // 2
-        // axios.get(`http://localhost:5000/job-applications?email=${user.email}`, { withCredentials: true })
+        // axios.get(`https://job-portal-server-drab-iota.vercel.app/job-applications?email=${user.email}`, { withCredentials: true })
         //     .then(result => setJobs(result.data))
 
         // 3

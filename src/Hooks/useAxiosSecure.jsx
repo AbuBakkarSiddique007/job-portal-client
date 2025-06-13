@@ -2,42 +2,44 @@ import axios from 'axios';
 import React from 'react';
 import useAuth from './useAuth';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: 'https://job-portal-server-drab-iota.vercel.app',
     withCredentials: true
-})
+});
 
 const useAxiosSecure = () => {
+    const { signOutUser } = useAuth();
+    const navigate = useNavigate();
 
-    const { signOutUser } = useAuth()
-    const navigate = useNavigate()
+    axiosInstance.interceptors.response.use(
+        (response) => response,
+        (error) => {
+            const status = error?.response?.status;
 
-    axiosInstance.interceptors.response.use((response) => {
-        return response;
-    }, (error) => {
-        console.log("Error caught in Axios Interceptors.");
+            if (status === 401 || status === 403) {
+                Swal.fire({
+                    title: 'Session Expired',
+                    text: 'You have been logged out. Please log in again.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    signOutUser()
+                        .then(() => {
+                            navigate('/login');
+                        })
+                        .catch(() => {
+                            // Optional: Handle sign-out errors silently
+                        });
+                });
+            }
 
-        if (error.status === 401 || error.status === 403) {
-            console.log('Now need to logout the user.');
-
-            // Logout the user
-            signOutUser()
-                .then(() => {
-                    console.log("Logout user.");
-                    navigate('/login')
-                })
-                .catch((error) => {
-                    console.log(error);
-
-                })
+            return Promise.reject(error);
         }
-
-        return Promise.reject(error)
-    })
+    );
 
     return axiosInstance;
-
 };
 
 export default useAxiosSecure;
