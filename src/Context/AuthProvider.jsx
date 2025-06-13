@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AuthContext from './AuthContext';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { auth } from '../Firebase/firebase.init';
+import axios from 'axios';
 
 
 const googleProvider = new GoogleAuthProvider();
@@ -27,7 +28,7 @@ const AuthProvider = ({ children }) => {
     }
 
     // 04. Google Loign
-    const googleLogin = () =>{
+    const googleLogin = () => {
         setLoading(true)
         return signInWithPopup(auth, googleProvider)
     }
@@ -44,10 +45,28 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubcribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
-            console.log("State captured", currentUser);
+            console.log("State captured", currentUser?.email);
 
+            if (currentUser?.email) {
+                const user = { email: currentUser?.email }
 
-            setLoading(false)
+                axios.post(`http://localhost:5000/jwt`, user, {
+                    withCredentials: true
+                })
+                    .then(result => {
+                        console.log("login token", result.data)
+                        setLoading(false)
+                    })
+            }
+            else {
+                axios.post(`http://localhost:5000/logout`, {}, {
+                    withCredentials: true
+                })
+                    .then(res => {
+                        console.log("logout:", res.data)
+                        setLoading(false)
+                    })
+            }
         })
         return () => {
             unsubcribe()

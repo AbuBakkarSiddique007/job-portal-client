@@ -4,7 +4,7 @@ import AuthContext from "../Context/AuthContext";
 import { useContext } from "react";
 import SocialLogin from "../Page/Shared/SocialLogin";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+//import axios from "axios";
 
 const Login = () => {
 
@@ -36,13 +36,14 @@ const Login = () => {
                 const userData = userCredential.user;
                 console.log("user:", userData.email);
 
-                const user = { email: email }
 
-                axios.post('http://localhost:5000/jwt', user, { withCredentials: true })
-                    .then(result => {
-                        console.log(result.data);
-                    })
-                // navigate(from)
+                // const user = { email: email }
+                // axios.post('http://localhost:5000/jwt', user, { withCredentials: true })
+                //     .then(result => {
+                //         console.log(result.data);
+                //     })
+
+                navigate(from)
             })
 
             .catch((error) => {
