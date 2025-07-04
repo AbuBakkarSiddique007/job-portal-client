@@ -4,6 +4,8 @@ import AuthContext from "../Context/AuthContext";
 import { useContext } from "react";
 import SocialLogin from "../Page/Shared/SocialLogin";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 //import axios from "axios";
 
 const Login = () => {
@@ -15,45 +17,77 @@ const Login = () => {
 
     const navigate = useNavigate()
 
+    // const handleLogin = (event) => {
+    //     event.preventDefault()
+
+    //     const form = event.target
+    //     const email = form.email.value
+    //     const password = form.password.value
+
+    //     const userInfo = {
+    //         email,
+    //         password
+    //     }
+
+    //     signInUser(email, password)
+    //         .then((userCredential) => {
+    //             const userData = userCredential.user;
+    // console.log("user:", userData.email);
+
+
+    // const user = { email: email }
+    // axios.post('https://job-portal-server-drab-iota.vercel.app/jwt', user, { withCredentials: true })
+    //     .then(result => {
+    //         console.log(result.data);
+    //     })
+
+
+    //             navigate(from)
+    //         })
+
+    //         .catch((error) => {
+    //             const errorCode = error.code;
+    //             const errorMessage = error.message;
+    //             console.log(errorCode, errorMessage);
+
+    //         });
+
+
+    // }
+
+
     const handleLogin = (event) => {
-        event.preventDefault()
+        event.preventDefault();
 
-        const form = event.target
-        const email = form.email.value
-        const password = form.password.value
-
-        const userInfo = {
-            email,
-            password
-        }
+        const form = event.target;
+        const email = form.email.value;
+        const password = form.password.value;
 
         signInUser(email, password)
             .then((userCredential) => {
                 const userData = userCredential.user;
-                // console.log("user:", userData.email);
 
+                toast.success(`Welcome back, ${userData.email}`, {
+                    autoClose: 2000,
+                    pauseOnHover: false
+                });
 
-                // const user = { email: email }
-                // axios.post('https://job-portal-server-drab-iota.vercel.app/jwt', user, { withCredentials: true })
-                //     .then(result => {
-                //         console.log(result.data);
-                //     })
-
-                navigate(from)
+                // Navigate after a slight delay to let toast show
+                setTimeout(() => {
+                    navigate(from);
+                }, 1000);
             })
-
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // console.log(errorCode, errorMessage);
-
+                toast.error("Invalid email or password", {
+                    autoClose: 2500,
+                    pauseOnHover: false
+                });
             });
-
-
-    }
+    };
 
     return (
         <div>
+            <ToastContainer />
             <div className="hero bg-base-200">
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="text-center lg:text-left">

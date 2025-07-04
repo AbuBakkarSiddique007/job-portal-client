@@ -50,14 +50,14 @@ const AuthProvider = ({ children }) => {
                     withCredentials: true
                 }).then(() => {
                     setLoading(false);
-                    toast.success(`Logged in as ${currentUser.email}`, { autoClose: 3000 });
+                    // toast.success(`Logged in as ${currentUser.email}`, { autoClose: 3000 });
                 });
             } else {
                 axios.post(`https://job-portal-server-drab-iota.vercel.app/logout`, {}, {
                     withCredentials: true
                 }).then(() => {
                     setLoading(false);
-                    toast.info('Logged out successfully', { autoClose: 3000 });
+                    // toast.info('Logged out successfully', { autoClose: 3000 });
                 });
             }
         });
